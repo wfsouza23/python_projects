@@ -1,48 +1,49 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import requests
 import json
 import time
 import pprint
 import os
-from geopy.geocoders import Nominatim
-#https://github.com/geopy/geopy/blob/master/README.rst
+# from geopy.geocoders import Nominatim
 
-load_dotenv()
-API_ID = os.getenv('API_ID')
+# https://github.com/geopy/geopy/blob/master/README.rst
+
+# load_dotenv()
+# API_ID = os.getenv('API_ID')
+
 
 class Weather:
-     def __init__(self,address):
-          self.addressDefinition(address)
+    def __init__(self, address):
+        # geo_locator = Nominatim(user_agent="my_app", timeout=7)
+        # location = geo_locator.geocode(address)
+        # self.longitude = str(location.longitude)
+        # self.latitude = str(location.latitude)
+        self.climate_forward(address)
 
-     def addressDefinition(self, address):
-          geolocator = Nominatim(user_agent="my_app", timeout=7)
-          location = geolocator.geocode(address)
+    def climate_forward(self, address):
+        # latitude = self.latitude
+        # longitude = self.longitude
+        # require = requests.get('https://api.openweathermap.org/data/2.5/onecall?lat={0}&lon={1}&appid={2}'.format(latitude, longitude, API_ID))
 
-          self.latitude = str(location.latitude)
-          self.longitude = str(location.longitude)
+        require = requests.get('http://api.openweathermap.org/data/2.5/forecast?q='+address+'&appid=d46062b73647474d81dd2324e41579e9')
 
-          self.climateForward()
+        climate = json.loads(require.text)
+        
+        print('')
+        print('Data de Hoje: ', time.ctime(climate['list'][0]['dt']))
+        print('Nascer do Sol: ', time.ctime(climate['city']['sunrise']))
+        print('Põr do Sol: ', time.ctime(climate['city']['sunset']))
+        # print('Temperatura Média: ', '{:.5}'.format(float(climate['main']['temp']) - 273))
+        # print('Descrição do tempo: ', climate['weather']['description'])
+        print('')
+        
+        
+        for i in range(0, 6):
+            print(time.ctime(climate['list'][i]['dt']))
+            print('Temperatura Mínima: ', '{:.5}'.format(float(climate['list'][i]['main']['temp_min']) - 273))
+            print('Temperatura Máxima: ', '{:.5}'.format(float(climate['list'][i]['main']['temp_max']) - 273))
+            # print('Descrição do tempo principal: ', climate['list'][i]['weather']['main'])
+            # print('Descrição do tempo: ', climate['list'][i]['weather']['description'])
+            print('')
+        
 
-     def climateForward(self):
-          latitude = self.latitude
-          longitude = self.longitude
-          require = requests.get('https://api.openweathermap.org/data/2.5/onecall?lat=' + latitude + '&lon=' + longitude + '&appid=' + API_ID)
-
-          climate = json.loads(require.text)
-
-          print('')
-          print('Data de Hoje: ', time.ctime(climate['current']['dt']))
-          print('Nascer do Sol: ', time.ctime(climate['current']['sunrise']))
-          print('Põr do Sol: ', time.ctime(climate['current']['sunset']))
-          print('Temperatura Média: ', '{:.5}'.format(float(climate['current']['temp'])-273))
-          print('Descrição do tempo: ', climate['current']['weather'][0]['description'])
-          print('')
-
-          for i in range(0,6):
-               print(time.ctime(climate['daily'][i]['dt']))
-               print('Nascer do Sol: ', time.ctime(climate['daily'][i]['sunrise']))
-               print('Põr do Sol: ', time.ctime(climate['daily'][i]['sunset']))
-               print('Temperatura Máxima: ', '{:.5}'.format(float(climate['daily'][i]['temp']['max'])-273))
-               print('Temperatura Mínima: ', '{:.5}'.format(float(climate['daily'][i]['temp']['min'])-273))
-               print('Descrição do tempo: ', climate['daily'][i]['weather'][0]['description'])
-               print('')
