@@ -1,4 +1,4 @@
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 import requests
 import json
 import time
@@ -8,8 +8,8 @@ import os
 
 # https://github.com/geopy/geopy/blob/master/README.rst
 
-# load_dotenv()
-# API_ID = os.getenv('API_ID')
+load_dotenv()
+API_ID = os.getenv('API_ID')
 
 
 class Weather:
@@ -25,7 +25,7 @@ class Weather:
         # longitude = self.longitude
         # require = requests.get('https://api.openweathermap.org/data/2.5/onecall?lat={0}&lon={1}&appid={2}'.format(latitude, longitude, API_ID))
 
-        require = requests.get('http://api.openweathermap.org/data/2.5/forecast?q='+address+'&appid=d46062b73647474d81dd2324e41579e9')
+        require = requests.get('http://api.openweathermap.org/data/2.5/forecast?q='+address+'&appid='+API_ID)
 
         climate = json.loads(require.text)
         
