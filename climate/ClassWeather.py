@@ -36,6 +36,7 @@ class Weather:
         # print('Temperatura Média: ', '{:.5}'.format(float(climate['main']['temp']) - 273))
         # print('Descrição do tempo: ', climate['weather']['description'])
         print('')
+        print('')
         
         
         for i in range(0, 6):
